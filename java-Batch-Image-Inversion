@@ -1,0 +1,27 @@
+import edu.duke.*;
+import java.io.*;
+
+public class BatchInversions {
+    public ImageResource makeInversion(ImageResource inImage){
+        ImageResource outImage = new ImageResource (inImage.getWidth(),inImage.getHeight());
+        for (Pixel outpx: outImage.pixels()){
+            Pixel inpx = inImage.getPixel(outpx.getX(),outpx.getY());
+            outpx.setRed (255-(inpx.getRed()));
+            outpx.setGreen (255-inpx.getGreen());
+            outpx.setBlue (255-inpx.getBlue());
+        }
+        return outImage;
+    }
+    public void SelectandConvert(){ 
+        DirectoryResource Dr = new DirectoryResource();
+        for (File f: Dr.selectedFiles()){
+            ImageResource inimg = new ImageResource(f);
+            ImageResource outimg = makeInversion(inimg);
+            String fname = inimg.getFileName();
+            String newname= "inverted-"+fname;
+            outimg.setFileName(newname);
+            outimg.save();
+            outimg.draw();
+        }
+    }
+}
