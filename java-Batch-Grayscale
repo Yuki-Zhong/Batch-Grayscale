@@ -1,0 +1,35 @@
+import edu.duke.*;
+import java.io.*;
+
+public class BatchGrayscale {
+    public ImageResource makeGray(ImageResource inImage){
+            ImageResource outImage = new ImageResource(inImage.getWidth(),inImage.getHeight());
+            for (Pixel outPixel:outImage.pixels()){
+                Pixel inPixel = inImage.getPixel(outPixel.getX(),outPixel.getY());
+                int avg = (inPixel.getRed()+inPixel.getGreen()+inPixel.getBlue())/3;
+                outPixel.setRed(avg);
+                outPixel.setGreen(avg);
+                outPixel.setBlue(avg);
+            }
+            return outImage;
+        } 
+    public void TestGray(){
+        ImageResource image= new ImageResource();
+        ImageResource output= makeGray(image);
+        output.draw();
+    }
+    public void GrayBatch(){
+        DirectoryResource Dr = new DirectoryResource ();
+        for (File f: Dr.selectedFiles()){
+            ImageResource img = new ImageResource(f);
+            ImageResource Gray =  makeGray(img);
+            String fname= img.getFileName();
+            String newname = "Gray-"+fname;
+            Gray.setFileName(newname);
+            Gray.save();
+            Gray.draw();
+        }
+    }
+    
+
+}    
